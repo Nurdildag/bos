@@ -1,0 +1,41 @@
+
+  743  clear
+  744  mkdir test
+  745  cd test/
+  746  touch file
+  747  chmod 000 file
+  748  vim file
+  749  echo "Hello" >> file
+  750  cat file
+  752  chmod 200 file
+  753  echo "test" >> file
+  800  chmod 240 file
+  801  ll
+  802  cat file
+  803  chmod 640 file
+  804  ls -l
+  805  cat file 
+  806  mkdir dir
+  813  cd dir 
+  814  touch new_file
+  815  cd ..
+  816  ls dir
+  817  chmod 666 dir 
+  818  ll
+  819  cd dir
+  820  rm ~/test/dir/new_file 
+  821  chown root file
+  822  chown root:root file
+  823  umask
+  824  umask 177
+  825  touch file1
+  826  ll
+  828  umask 111
+  829  touch file2
+  830  ll
+  832  sudo su
+  833  cat file
+  834  sudo su
+  835  cat file 
+  836  ls -lR >> ~/ls_LR
+  837  history >> laba2  
