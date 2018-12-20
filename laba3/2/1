@@ -1,0 +1,6 @@
+#!/bin/bash
+date >> /tmp/run.log
+echo "Hello Wolrd"
+cat /tmp/run.log | wc -l >&2
+
+

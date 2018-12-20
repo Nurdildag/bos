@@ -1,0 +1,9 @@
+#!/bin/bash
+ls  ~/*.txt >> /tmp/txt
+cat /tmp/txt
+echo "Bytes"
+wc -b /tmp/txt
+echo "Lines"
+wc -l /tmp/txt
+rm /tmp/txt
+ 
