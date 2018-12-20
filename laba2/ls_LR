@@ -1,0 +1,11 @@
+.:
+итого 4
+drw-rw-rw-. 2 gabosya gabosya 22 дек 19 21:19 dir
+-r--r-----. 1 root    gabosya  5 дек 19 20:53 file
+-rw-------. 1 gabosya gabosya  0 дек 19 21:35 file1
+-rw-rw-rw-. 1 gabosya gabosya  0 дек 19 21:38 file2
+-rw-rw-r--. 1 gabosya gabosya  0 дек 19 22:23 ls_LR
+
+./dir:
+итого 0
+-????????? ? ? ? ?            ? new_file
