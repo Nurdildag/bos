@@ -1,0 +1,2 @@
+auth	requisite		pam_unix.so
+account	requisite		pam_unix.so

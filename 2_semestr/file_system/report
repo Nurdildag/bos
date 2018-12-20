@@ -1,0 +1,164 @@
+$ ls -l /dev/sda{,[123]}
+brw-rw----. 1 root disk 8, 0 Feb 24 15:22 /dev/sda
+brw-rw----. 1 root disk 8, 1 Feb 24 15:22 /dev/sda1
+brw-rw----. 1 root disk 8, 2 Feb 24 15:22 /dev/sda2
+$ lsblk --list
+NAME        MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sda           8:0    0   20G  0 disk 
+sda1          8:1    0    1G  0 part /boot
+sda2          8:2    0   19G  0 part 
+centos-root 253:0    0   17G  0 lvm  /
+centos-swap 253:1    0    2G  0 lvm  [SWAP]
+sr0          11:0    1 1024M  0 rom  
+$ cat /proc/diskstats
+  11       0 sr0 0 0 0 0 0 0 0 0 0 0 0
+   8       0 sda 6131 9 414577 5572 7314 577 304960 5317 0 6148 10861
+   8       1 sda1 1910 0 50924 603 10 0 4136 22 0 513 625
+   8       2 sda2 4190 9 360309 4946 6097 577 300824 4318 0 4949 9236
+ 253       0 dm-0 4029 0 351149 4956 7373 0 300824 6675 0 5604 11630
+ 253       1 dm-1 90 0 4920 28 0 0 0 0 0 25 28
+$ cat /proc/devices
+Character devices:
+  1 mem
+  4 /dev/vc/0
+  4 tty
+  4 ttyS
+  5 /dev/tty
+  5 /dev/console
+  5 /dev/ptmx
+  7 vcs
+ 10 misc
+ 13 input
+ 14 sound
+ 21 sg
+ 29 fb
+ 99 ppdev
+116 alsa
+128 ptm
+136 pts
+162 raw
+180 usb
+188 ttyUSB
+189 usb_device
+202 cpu/msr
+203 cpu/cpuid
+246 hidraw
+247 usbmon
+248 bsg
+249 hmm_device
+250 watchdog
+251 iio
+252 rtc
+253 dax
+254 tpm
+
+Block devices:
+259 blkext
+  8 sd
+  9 md
+ 11 sr
+ 65 sd
+ 66 sd
+ 67 sd
+ 68 sd
+ 69 sd
+ 70 sd
+ 71 sd
+128 sd
+129 sd
+130 sd
+131 sd
+132 sd
+133 sd
+134 sd
+135 sd
+253 device-mapper
+254 mdp
+# dd if=/dev/zero of=./fs.img bs=1M count=10
+10+0 records in
+10+0 records out
+10485760 bytes (10 MB) copied, 0.0052103 s, 2.0 GB/s
+# losetup --find --show ./fs.img
+/dev/loop0
+# losetup --list
+NAME       SIZELIMIT OFFSET AUTOCLEAR RO BACK-FILE
+/dev/loop0         0      0         0  0 /home/azamat/OS_SECURITY/semestr_2/lab1/fs.img
+# mkfs -t ext4 /dev/loop0
+Discarding device blocks:  1024/10240           done                            
+Filesystem label=
+OS type: Linux
+Block size=1024 (log=0)
+Fragment size=1024 (log=0)
+Stride=0 blocks, Stripe width=0 blocks
+2560 inodes, 10240 blocks
+512 blocks (5.00%) reserved for the super user
+First data block=1
+Maximum filesystem blocks=10485760
+2 block groups
+8192 blocks per group, 8192 fragments per group
+1280 inodes per group
+Superblock backups stored on blocks: 
+	8193
+
+Allocating group tables: 0/2   done                            
+Writing inode tables: 0/2   done                            
+Creating journal (1024 blocks): done
+Writing superblocks and filesystem accounting information: 0/2   done
+
+# blkid /dev/loop0
+/dev/loop0: UUID="f548e374-2fb2-458c-86ef-78cf04431c0e" TYPE="ext4" 
+# mount /dev/loop0 /mnt
+# mount | grep /mnt
+/dev/loop0 on /mnt type ext4 (rw,relatime,seclabel,data=ordered)
+# df -h /mnt
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/loop0      8.7M  172K  7.9M   3% /mnt
+df -hi /mnt
+Filesystem     Inodes IUsed IFree IUse% Mounted on
+/dev/loop0       2.5K    11  2.5K    1% /mnt
+# umount /dev/loop0
+tune2fs -l /dev/loop0
+tune2fs 1.42.9 (28-Dec-2013)
+Filesystem volume name:   <none>
+Last mounted on:          <not available>
+Filesystem UUID:          f548e374-2fb2-458c-86ef-78cf04431c0e
+Filesystem magic number:  0xEF53
+Filesystem revision #:    1 (dynamic)
+Filesystem features:      has_journal ext_attr resize_inode dir_index filetype extent 64bit flex_bg sparse_super huge_file uninit_bg dir_nlink extra_isize
+Filesystem flags:         signed_directory_hash 
+Default mount options:    user_xattr acl
+Filesystem state:         clean
+Errors behavior:          Continue
+Filesystem OS type:       Linux
+Inode count:              2560
+Block count:              10240
+Reserved block count:     512
+Free blocks:              8715
+Free inodes:              2549
+First block:              1
+Block size:               1024
+Fragment size:            1024
+Group descriptor size:    64
+Reserved GDT blocks:      79
+Blocks per group:         8192
+Fragments per group:      8192
+Inodes per group:         1280
+Inode blocks per group:   160
+Flex block group size:    16
+Filesystem created:       Sun Feb 24 16:19:57 2019
+Last mount time:          Sun Feb 24 16:22:29 2019
+Last write time:          Sun Feb 24 16:24:17 2019
+Mount count:              1
+Maximum mount count:      -1
+Last checked:             Sun Feb 24 16:19:57 2019
+Check interval:           0 (<none>)
+Lifetime writes:          1190 kB
+Reserved blocks uid:      0 (user root)
+Reserved blocks gid:      0 (group root)
+First inode:              11
+Inode size:	          128
+Journal inode:            8
+Default directory hash:   half_md4
+Directory Hash Seed:      92ad06dd-2e01-4a2e-9da2-0a802531901a
+Journal backup:           inode blocks
+# losetup --detach /dev/loop0

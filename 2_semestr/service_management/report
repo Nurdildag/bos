@@ -1,0 +1,539 @@
+ps xaf
+  PID TTY      STAT   TIME COMMAND
+    2 ?        S      0:00 [kthreadd]
+    3 ?        S      0:00  \_ [ksoftirqd/0]
+    5 ?        S<     0:00  \_ [kworker/0:0H]
+    6 ?        S      0:00  \_ [kworker/u2:0]
+    7 ?        S      0:00  \_ [migration/0]
+    8 ?        S      0:00  \_ [rcu_bh]
+    9 ?        R      0:00  \_ [rcu_sched]
+   10 ?        S<     0:00  \_ [lru-add-drain]
+   11 ?        S      0:00  \_ [watchdog/0]
+ps xawf -eo pid,user,cgroup,args
+  PID USER     CGROUP                      COMMAND
+    2 root     -                           [kthreadd]
+    3 root     -                            \_ [ksoftirqd/0]
+    5 root     -                            \_ [kworker/0:0H]
+    6 root     -                            \_ [kworker/u2:0]
+    7 root     -                            \_ [migration/0]
+    8 root     -                            \_ [rcu_bh]
+    9 root     -                            \_ [rcu_sched]
+   10 root     -                            \_ [lru-add-drain]
+   11 root     -                            \_ [watchdog/0]
+systemd-cgls
+├─1 /usr/lib/systemd/systemd --switched-root --system --deserialize 22
+├─user.slice
+│ ├─user-0.slice
+│ │ └─session-2.scope
+│ │   └─3503 /usr/sbin/anacron -s
+│ └─user-1000.slice
+│   └─session-1.scope
+│     ├─2627 login -- azamat
+│     ├─3324 -bash
+│     ├─3451 dhclient
+
+
+
+ls -l /usr/lib/systemd/system/
+total 828
+-rw-r--r--. 1 root root 1169 Oct 30  2018 auditd.service
+lrwxrwxrwx. 1 root root   14 Mar 25 09:27 autovt@.service -> getty@.service
+-rw-r--r--. 1 root root  517 Oct 30  2018 basic.target
+drwxr-xr-x. 2 root root   67 May 18 20:54 basic.target.wants
+-r--r--r--. 1 root root  406 Oct 30  2018 blk-availability.service
+-rw-r--r--. 1 root root  379 Oct 30  2018 bluetooth.target
+-rw-r--r--. 1 root root  160 Aug 24  2018 brandbot.path
+-rw-r--r--. 1 root root  116 Aug 24  2018 brandbot.service
+-rw-r--r--. 1 root root  209 Apr 10  2018 chrony-dnssrv@.service
+
+
+ls -l /run/systemd/system
+total 16
+-rw-r--r--. 1 root root  17 May 19 18:52 session-1.scope
+drwxr-xr-x. 2 root root 160 May 19 18:52 session-1.scope.d
+-rw-r--r--. 1 root root  17 May 19 19:01 session-2.scope
+drwxr-xr-x. 2 root root 160 May 19 19:01 session-2.scope.d
+-rw-r--r--. 1 root root  17 May 19 19:01 user-0.slice
+drwxr-xr-x. 2 root root 120 May 19 19:01 user-0.slice.d
+-rw-r--r--. 1 root root  17 May 19 18:52 user-1000.slice
+drwxr-xr-x. 2 root root 120 May 19 18:52 user-1000.slice.d
+
+
+ls -l /etc/systemd/system/
+total 4
+drwxr-xr-x. 2 root root   57 Mar 25 09:28 basic.target.wants
+lrwxrwxrwx. 1 root root   41 Mar 25 09:28 dbus-org.fedoraproject.FirewallD1.service -> /usr/lib/systemd/system/firewalld.service
+lrwxrwxrwx. 1 root root   46 Mar 25 09:28 dbus-org.freedesktop.NetworkManager.service -> /usr/lib/systemd/system/NetworkManager.service
+lrwxrwxrwx. 1 root root   57 Mar 25 09:28 dbus-org.freedesktop.nm-dispatcher.service -> /usr/lib/systemd/system/NetworkManager-dispatcher.service
+lrwxrwxrwx. 1 root root   37 Mar 25 09:31 default.target -> /lib/systemd/system/multi-user.target
+drwxr-xr-x. 2 root root   87 Mar 25 09:27 default.target.wants
+drwxr-xr-x. 2 root root   32 Mar 25 09:27 getty.target.wants
+drwxr-xr-x. 2 root root   35 Mar 25 09:27 local-fs.target.wants
+drwxr-xr-x. 2 root root 4096 Mar 25 09:28 multi-user.target.wants
+drwxr-xr-x. 2 root root   48 Mar 25 09:28 network-online.target.wants
+drwxr-xr-x. 2 root root   29 Mar 25 09:28 sockets.target.wants
+drwxr-xr-x. 2 root root  217 Mar 25 09:28 sysinit.target.wants
+drwxr-xr-x. 2 root root   44 Mar 25 09:27 system-update.target.wants
+
+
+
+systemctl -t help
+Available unit types:
+service
+socket
+busname
+target
+snapshot
+device
+mount
+automount
+swap
+timer
+path
+slice
+scope
+
+systemctl status
+● localhost.localdomain
+    State: degraded
+     Jobs: 0 queued
+   Failed: 1 units
+    Since: Sun 2019-05-19 18:50:40 EDT; 23min ago
+   CGroup: /
+           ├─1 /usr/lib/systemd/systemd --switched-root --system --deserialize 22
+           ├─user.slice
+           │ └─user-1000.slice
+           │   └─session-1.scope
+           │     ├─2627 login -- azamat      
+           │     ├─3324 -bash
+           │     ├─3451 dhclient
+           │     └─6687 systemctl status
+           └─system.slice
+             ├─rsyslog.service
+             │ └─2970 /usr/sbin/rsyslogd -n
+             ├─sshd.service
+             │ └─2969 /usr/sbin/sshd -D
+             ├─tuned.service
+             │ └─2968 /usr/bin/python2 -Es /usr/sbin/tuned -l -P
+             ├─postfix.service
+             │ ├─3294 /usr/libexec/postfix/master -w
+             │ ├─3298 pickup -l -t unix -u
+             │ └─3299 qmgr -l -t unix -u
+             ├─NetworkManager.service
+             │ └─2628 /usr/sbin/NetworkManager --no-daemon
+             ├─firewalld.service
+             │ └─2626 /usr/bin/python -Es /usr/sbin/firewalld --nofork --nopid
+             ├─crond.service
+             │ └─2617 /usr/sbin/crond -n
+             ├─dbus.service
+             │ └─2579 /usr/bin/dbus-daemon --system --address=systemd: --nofork --nopidfile --systemd-activation
+             ├─systemd-logind.service
+             │ └─2577 /usr/lib/systemd/systemd-logind
+             ├─polkit.service
+             │ └─2575 /usr/lib/polkit-1/polkitd --no-debug
+             ├─chronyd.service
+             │ └─2583 /usr/sbin/chronyd
+             ├─auditd.service
+             │ └─2537 /sbin/auditd
+             ├─systemd-udevd.service
+             │ └─1425 /usr/lib/systemd/systemd-udevd
+             ├─lvm2-lvmetad.service
+             │ └─1411 /usr/sbin/lvmetad -f
+             └─systemd-journald.service
+               └─1394 /usr/lib/systemd/systemd-journald
+
+systemctl --type=service
+  UNIT                               LOAD   ACTIVE SUB     DESCRIPTION
+  auditd.service                     loaded active running Security Auditing Service
+  chronyd.service                    loaded active running NTP client/server
+  crond.service                      loaded active running Command Scheduler
+  dbus.service                       loaded active running D-Bus System Message Bus
+  firewalld.service                  loaded active running firewalld - dynamic firewall daemon
+  getty@tty1.service                 loaded active running Getty on tty1
+● kdump.service                      loaded failed failed  Crash recovery kernel arming
+  kmod-static-nodes.service          loaded active exited  Create list of required static device nodes for the current kernel
+  lvm2-lvmetad.service               loaded active running LVM2 metadata daemon
+
+systemctl status polkit.service
+● polkit.service - Authorization Manager
+   Loaded: loaded (/usr/lib/systemd/system/polkit.service; static; vendor preset: enabled)
+   Active: active (running) since Sun 2019-05-19 18:50:44 EDT; 26min ago
+     Docs: man:polkit(8)
+ Main PID: 2575 (polkitd)
+   CGroup: /system.slice/polkit.service
+           └─2575 /usr/lib/polkit-1/polkitd --no-debug
+
+May 19 18:50:44 localhost.localdomain systemd[1]: Starting Authorization Manager...
+May 19 18:50:44 localhost.localdomain polkitd[2575]: Started polkitd version 0.112
+May 19 18:50:44 localhost.localdomain polkitd[2575]: Loading rules from directory /etc/polkit-1/rules.d
+May 19 18:50:44 localhost.localdomain polkitd[2575]: Loading rules from directory /usr/share/polkit-1/rules.d
+May 19 18:50:44 localhost.localdomain polkitd[2575]: Finished loading, compiling and executing 2 rules
+May 19 18:50:44 localhost.localdomain polkitd[2575]: Acquired the name org.freedesktop.PolicyKit1 on the system bus
+May 19 18:50:44 localhost.localdomain systemd[1]: Started Authorization Manager.
+
+systemctl is-active polkit.service
+active
+
+systemctl is-enabled polkit.service
+static
+
+systemctl list-dependencies --after polkit.service
+polkit.service
+● ├─system.slice
+● ├─systemd-journald.socket
+● └─basic.target
+●   ├─systemd-ask-password-plymouth.path
+●   ├─paths.target
+●   │ ├─systemd-ask-password-console.path
+●   │ └─systemd-ask-password-wall.path
+●   ├─slices.target
+●   │ ├─-.slice
+●   │ ├─system.slice
+●   │ └─user.slice
+●   ├─sockets.target
+●   │ ├─dbus.socket
+●   │ ├─sshd.socket
+●   │ ├─syslog.socket
+●   │ ├─systemd-initctl.socket
+●   │ ├─systemd-journald.socket
+●   │ ├─systemd-shutdownd.socket
+●   │ ├─systemd-udevd-control.socket
+●   │ └─systemd-udevd-kernel.socket
+●   └─sysinit.target
+●     ├─auditd.service
+●     ├─dev-hugepages.mount
+●     ├─dev-mqueue.mount
+●     ├─emergency.service
+●     ├─kmod-static-nodes.service
+●     ├─plymouth-read-write.service
+●     ├─proc-sys-fs-binfmt_misc.automount
+●     ├─rhel-autorelabel.service
+●     ├─rhel-domainname.service
+●     ├─rhel-import-state.service
+●     ├─rhel-loadmodules.service
+●     ├─selinux-policy-migrate-local-changes@targeted.service
+●     ├─sys-fs-fuse-connections.mount
+●     ├─sys-kernel-config.mount
+●     ├─sys-kernel-debug.mount
+●     ├─systemd-binfmt.service
+●     ├─systemd-firstboot.service
+●     ├─systemd-hwdb-update.service
+●     ├─systemd-journal-catalog-update.service
+●     ├─systemd-journald.service
+●     ├─systemd-machine-id-commit.service
+●     ├─systemd-modules-load.service
+●     ├─systemd-random-seed.service
+●     ├─systemd-readahead-collect.service
+●     ├─systemd-readahead-replay.service
+●     ├─systemd-sysctl.service
+●     ├─systemd-tmpfiles-setup-dev.service
+●     ├─systemd-tmpfiles-setup.service
+●     ├─systemd-udev-trigger.service
+●     ├─systemd-udevd.service
+●     ├─systemd-update-done.service
+●     ├─systemd-update-utmp.service
+●     ├─systemd-vconsole-setup.service
+●     ├─cryptsetup.target
+●     ├─emergency.target
+●     │ ├─emergency.service
+●     │ ├─rhel-import-state.service
+●     │ └─rhel-readonly.service
+●     ├─local-fs.target
+●     │ ├─-.mount
+●     │ ├─boot.mount
+●     │ ├─rhel-readonly.service
+●     │ ├─run-user-1000.mount
+●     │ ├─sys-kernel-config.mount
+●     │ ├─systemd-fsck-root.service
+●     │ ├─systemd-remount-fs.service
+●     │ ├─tmp.mount
+●     │ └─local-fs-pre.target
+●     │   ├─dm-event.service
+●     │   ├─lvm2-monitor.service
+●     │   ├─systemd-remount-fs.service
+●     │   └─systemd-tmpfiles-setup-dev.service
+●     └─swap.target
+●       ├─dev-centos-swap.swap
+●       ├─dev-disk-by\x2did-dm\x2dname\x2dcentos\x2dswap.swap
+●       ├─dev-disk-by\x2did-dm\x2duuid\x2dLVM\x2dh1qihL3Oc3fmWTGFM28r6oa1Nerglr...
+●       ├─dev-disk-by\x2duuid-ca08e431\x2d3fa9\x2d4ab2\x2da5cc\x2dd785cb842ee6....
+●       ├─dev-dm\x2d1.swap
+●       └─dev-mapper-centos\x2dswap.swap
+
+systemctl list-dependencies --before polkit.service
+polkit.service
+● ├─firewalld.service
+● └─shutdown.target
+●   ├─systemd-reboot.service
+●   └─final.target
+●     └─systemd-reboot.service
+
+systemctl list-units --type=service
+  UNIT                               LOAD   ACTIVE SUB     DESCRIPTION
+  auditd.service                     loaded active running Security Auditing Service
+  chronyd.service                    loaded active running NTP client/server
+  crond.service                      loaded active running Command Scheduler
+  dbus.service                       loaded active running D-Bus System Message Bus
+  firewalld.service                  loaded active running firewalld - dynamic firewall daemon
+  getty@tty1.service                 loaded active running Getty on tty1
+● kdump.service                      loaded failed failed  Crash recovery kernel arming
+  kmod-static-nodes.service          loaded active exited  Create list of required static device nodes for the current kernel
+  lvm2-lvmetad.service               loaded active running LVM2 metadata daemon
+
+systemctl list-units --type=service --all
+  UNIT                                                  LOAD      ACTIVE   SUB     DESCRIPTION
+  auditd.service                                        loaded    active   running Security Auditing Service
+  chronyd.service                                       loaded    active   running NTP client/server
+  cpupower.service                                      loaded    inactive dead    Configure CPU power related settings
+  crond.service                                         loaded    active   running Command Scheduler
+  dbus.service                                          loaded    active   running D-Bus System Message Bus
+● display-manager.service                               not-found inactive dead    display-manager.service
+  dm-event.service                                      loaded    inactive dead    Device-mapper event daemon
+  dracut-shutdown.service                               loaded    inactive dead    Restore /run/initramfs
+  ebtables.service                                      loaded    inactive dead    Ethernet Bridge Filtering tables
+
+systemctl list-units --type=socket --all
+UNIT                         LOAD   ACTIVE   SUB       DESCRIPTION
+dbus.socket                  loaded active   running   D-Bus System Message Bus Socket
+dm-event.socket              loaded active   listening Device-mapper event daemon FIFOs
+lvm2-lvmetad.socket          loaded active   running   LVM2 metadata daemon socket
+lvm2-lvmpolld.socket         loaded active   listening LVM2 poll daemon socket
+sshd.socket                  loaded inactive dead      OpenSSH Server Socket
+syslog.socket                loaded inactive dead      Syslog Socket
+systemd-initctl.socket       loaded active   listening /dev/initctl Compatibility Named Pipe
+systemd-journald.socket      loaded active   running   Journal Socket
+systemd-shutdownd.socket     loaded active   listening Delayed Shutdown Socket
+
+systemctl list-unit-files --type=service | grep enabled
+auditd.service                                enabled 
+autovt@.service                               enabled 
+chronyd.service                               enabled 
+crond.service                                 enabled 
+dbus-org.fedoraproject.FirewallD1.service     enabled 
+dbus-org.freedesktop.NetworkManager.service   enabled 
+dbus-org.freedesktop.nm-dispatcher.service    enabled 
+firewalld.service                             enabled 
+getty@.service                                enabled 
+irqbalance.service                            enabled 
+kdump.service                                 enabled 
+lvm2-monitor.service                          enabled 
+microcode.service                             enabled 
+NetworkManager-dispatcher.service             enabled 
+NetworkManager-wait-online.service            enabled 
+NetworkManager.service                        enabled 
+postfix.service                               enabled 
+rhel-autorelabel.service                      enabled 
+rhel-configure.service                        enabled 
+rhel-dmesg.service                            enabled 
+rhel-domainname.service                       enabled 
+rhel-import-state.service                     enabled 
+rhel-loadmodules.service                      enabled 
+rhel-readonly.service                         enabled 
+rsyslog.service                               enabled 
+sshd.service                                  enabled 
+systemd-readahead-collect.service             enabled 
+systemd-readahead-drop.service                enabled 
+systemd-readahead-replay.service              enabled 
+tuned.service                                 enabled 
+
+systemctl --failed --type=service
+  UNIT          LOAD   ACTIVE SUB    DESCRIPTION
+● kdump.service loaded failed failed Crash recovery kernel arming
+
+LOAD   = Reflects whether the unit definition was properly loaded.
+ACTIVE = The high-level unit activation state, i.e. generalization of SUB.
+SUB    = The low-level unit activation state, values depend on unit type.
+
+1 loaded units listed. Pass --all to see loaded but inactive units, too.
+To show all installed unit files use 'systemctl list-unit-files'.
+
+
+
+systemctl status httpd.service
+● httpd.service - The Apache HTTP Server
+   Loaded: loaded (/usr/lib/systemd/system/httpd.service; disabled; vendor preset: disabled)
+   Active: inactive (dead)
+     Docs: man:httpd(8)
+           man:apachectl(8)
+
+systemctl start httpd.service
+
+systemctl status httpd.service
+● httpd.service - The Apache HTTP Server
+   Loaded: loaded (/usr/lib/systemd/system/httpd.service; disabled; vendor preset: disabled)
+   Active: active (running) since Sun 2019-05-19 19:31:43 EDT; 1min 14s ago
+     Docs: man:httpd(8)
+           man:apachectl(8)
+ Main PID: 6836 (httpd)
+   Status: "Total requests: 0; Current requests/sec: 0; Current traffic:   0 B/sec"
+   CGroup: /system.slice/httpd.service
+           ├─6836 /usr/sbin/httpd -DFOREGROUND
+           ├─6837 /usr/sbin/httpd -DFOREGROUND
+           ├─6838 /usr/sbin/httpd -DFOREGROUND
+           ├─6839 /usr/sbin/httpd -DFOREGROUND
+           ├─6840 /usr/sbin/httpd -DFOREGROUND
+           └─6841 /usr/sbin/httpd -DFOREGROUND
+
+May 19 19:31:43 localhost.localdomain systemd[1]: Starting The Apache HTTP Server...
+May 19 19:31:43 localhost.localdomain httpd[6836]: AH00558: httpd: Could not reliably determine the server's fully qualified domain name, using localhost.localdomain. Set the 'ServerName' directive globally to suppress this message
+May 19 19:31:43 localhost.localdomain systemd[1]: Started The Apache HTTP Server.
+
+systemctl restart httpd.service
+
+systemctl status httpd.service
+● httpd.service - The Apache HTTP Server
+   Loaded: loaded (/usr/lib/systemd/system/httpd.service; disabled; vendor preset: disabled)
+   Active: active (running) since Sun 2019-05-19 19:33:35 EDT; 21s ago
+     Docs: man:httpd(8)
+           man:apachectl(8)
+  Process: 6861 ExecStop=/bin/kill -WINCH ${MAINPID} (code=exited, status=0/SUCCESS)
+ Main PID: 6866 (httpd)
+   Status: "Total requests: 0; Current requests/sec: 0; Current traffic:   0 B/sec"
+   CGroup: /system.slice/httpd.service
+           ├─6866 /usr/sbin/httpd -DFOREGROUND
+           ├─6867 /usr/sbin/httpd -DFOREGROUND
+           ├─6868 /usr/sbin/httpd -DFOREGROUND
+           ├─6869 /usr/sbin/httpd -DFOREGROUND
+           ├─6870 /usr/sbin/httpd -DFOREGROUND
+           └─6871 /usr/sbin/httpd -DFOREGROUND
+
+May 19 19:33:35 localhost.localdomain systemd[1]: Stopped The Apache HTTP Server.
+May 19 19:33:35 localhost.localdomain systemd[1]: Starting The Apache HTTP Server...
+May 19 19:33:35 localhost.localdomain httpd[6866]: AH00558: httpd: Could not reliably determine the server's fully qualified domain name, using localhost.localdomain. Set the 'ServerName' directive globally to suppress this message
+May 19 19:33:35 localhost.localdomain systemd[1]: Started The Apache HTTP Server.
+
+systemctl stop httpd.service
+
+
+systemctl enable httpd.service
+
+systemctl status httpd.service
+● httpd.service - The Apache HTTP Server
+   Loaded: loaded (/usr/lib/systemd/system/httpd.service; enabled; vendor preset: disabled)
+   Active: inactive (dead)
+     Docs: man:httpd(8)
+           man:apachectl(8)
+
+May 19 19:31:43 localhost.localdomain systemd[1]: Starting The Apache HTTP Server...
+May 19 19:31:43 localhost.localdomain httpd[6836]: AH00558: httpd: Could not reliably determine the server's fully qualified domain name, using localhost.localdomain. Set the 'ServerName' directive globally to suppress this message
+May 19 19:31:43 localhost.localdomain systemd[1]: Started The Apache HTTP Server.
+May 19 19:33:34 localhost.localdomain systemd[1]: Stopping The Apache HTTP Server...
+May 19 19:33:35 localhost.localdomain systemd[1]: Stopped The Apache HTTP Server.
+May 19 19:33:35 localhost.localdomain systemd[1]: Starting The Apache HTTP Server...
+May 19 19:33:35 localhost.localdomain httpd[6866]: AH00558: httpd: Could not reliably determine the server's fully qualified domain name, using localhost.localdomain. Set the 'ServerName' directive globally to suppress this message
+May 19 19:33:35 localhost.localdomain systemd[1]: Started The Apache HTTP Server.
+May 19 19:34:27 localhost.localdomain systemd[1]: Stopping The Apache HTTP Server...
+May 19 19:34:28 localhost.localdomain systemd[1]: Stopped The Apache HTTP Server.
+
+systemctl start httpd.service
+
+systemctl status httpd.service
+● httpd.service - The Apache HTTP Server
+   Loaded: loaded (/usr/lib/systemd/system/httpd.service; enabled; vendor preset: disabled)
+   Active: active (running) since Sun 2019-05-19 19:36:33 EDT; 19s ago
+     Docs: man:httpd(8)
+           man:apachectl(8)
+ Main PID: 6951 (httpd)
+   Status: "Total requests: 0; Current requests/sec: 0; Current traffic:   0 B/sec"
+   CGroup: /system.slice/httpd.service
+           ├─6951 /usr/sbin/httpd -DFOREGROUND
+           ├─6952 /usr/sbin/httpd -DFOREGROUND
+           ├─6953 /usr/sbin/httpd -DFOREGROUND
+           ├─6954 /usr/sbin/httpd -DFOREGROUND
+           ├─6955 /usr/sbin/httpd -DFOREGROUND
+           └─6956 /usr/sbin/httpd -DFOREGROUND
+
+May 19 19:36:33 localhost.localdomain systemd[1]: Starting The Apache HTTP Server...
+May 19 19:36:33 localhost.localdomain httpd[6951]: AH00558: httpd: Could not reliably determine the server's fully qualified domain name, using localhost.localdomain. Set the 'ServerName' directive globally to suppress this message
+May 19 19:36:33 localhost.localdomain systemd[1]: Started The Apache HTTP Server.
+
+systemctl disable httpd.service
+
+systemctl mask httpd.service
+
+systemctl start httpd.service
+
+Failed to start httpd.service: Unit is masked
+
+systemctl unmask httpd.service
+
+
+TARGET MANAGEMENT
+systemctl list-units --type=target
+UNIT                  LOAD   ACTIVE SUB    DESCRIPTION
+basic.target          loaded active active Basic System
+cryptsetup.target     loaded active active Local Encrypted Volumes
+getty.target          loaded active active Login Prompts
+local-fs-pre.target   loaded active active Local File Systems (Pre)
+local-fs.target       loaded active active Local File Systems
+multi-user.target     loaded active active Multi-User System
+network-online.target loaded active active Network is Online
+network-pre.target    loaded active active Network (Pre)
+network.target        loaded active active Network
+paths.target          loaded active active Paths
+remote-fs.target      loaded active active Remote File Systems
+slices.target         loaded active active Slices
+sockets.target        loaded active active Sockets
+sound.target          loaded active active Sound Card
+swap.target           loaded active active Swap
+sysinit.target        loaded active active System Initialization
+timers.target         loaded active active Timers
+
+LOAD   = Reflects whether the unit definition was properly loaded.
+ACTIVE = The high-level unit activation state, i.e. generalization of SUB.
+SUB    = The low-level unit activation state, values depend on unit type.
+
+17 loaded units listed. Pass --all to see loaded but inactive units, too.
+To show all installed unit files use 'systemctl list-unit-files'.
+
+systemctl list-units --type=target --all
+  UNIT                   LOAD      ACTIVE   SUB    DESCRIPTION
+  basic.target           loaded    active   active Basic System
+  cryptsetup.target      loaded    active   active Local Encrypted Volumes
+  emergency.target       loaded    inactive dead   Emergency Mode
+  final.target           loaded    inactive dead   Final Step
+  getty-pre.target       loaded    inactive dead   Login Prompts (Pre)
+  getty.target           loaded    active   active Login Prompts
+  graphical.target       loaded    inactive dead   Graphical Interface
+  local-fs-pre.target    loaded    active   active Local File Systems (Pre)
+  local-fs.target        loaded    active   active Local File Systems
+  multi-user.target      loaded    active   active Multi-User System
+  network-online.target  loaded    active   active Network is Online
+  network-pre.target     loaded    active   active Network (Pre)
+  network.target         loaded    active   active Network
+  nss-user-lookup.target loaded    inactive dead   User and Group Name Lookups
+  paths.target           loaded    active   active Paths
+  remote-fs-pre.target   loaded    inactive dead   Remote File Systems (Pre)
+  remote-fs.target       loaded    active   active Remote File Systems
+  rescue.target          loaded    inactive dead   Rescue Mode
+  shutdown.target        loaded    inactive dead   Shutdown
+  slices.target          loaded    active   active Slices
+  sockets.target         loaded    active   active Sockets
+  sound.target           loaded    active   active Sound Card
+  swap.target            loaded    active   active Swap
+  sysinit.target         loaded    active   active System Initialization
+● syslog.target          not-found inactive dead   syslog.target
+  time-sync.target       loaded    inactive dead   System Time Synchronized
+  timers.target          loaded    active   active Timers
+  umount.target          loaded    inactive dead   Unmount All Filesystems
+
+LOAD   = Reflects whether the unit definition was properly loaded.
+ACTIVE = The high-level unit activation state, i.e. generalization of SUB.
+SUB    = The low-level unit activation state, values depend on unit type.
+
+28 loaded units listed.
+To show all installed unit files use 'systemctl list-unit-files'.
+
+systemctl get-default
+multi-user.target
+
+ls -l /etc/systemd/system/default.target
+lrwxrwxrwx. 1 root root 37 Mar 25 09:31 /etc/systemd/system/default.target -> /lib/systemd/system/multi-user.target
+
+systemctl set-default graphical.target
+
+systemctl isolate graphical.target
+
+systemctl --no-wall rescue
+
+systemctl --no-wall emergency

@@ -1,0 +1,78 @@
+1  ldd /bin/ls | grep selinux
+2  ls -l /etc/selinux
+3  ll /etc/selinux/targeted/
+4  gedit /etc/selinux/config
+5  sestatus
+6  sudo gedit /etc/selinux/config 
+7  sestatus
+8  setenforce 1
+9  sudo setenforce 1
+10  sestatus
+11  sudo echo 1> /sys/fs/selinux/enforce
+12  su
+13  sestatus
+14  whereis grubconf
+15  where is grub_conf
+16  whereis grub_conf
+17  yum install setools-console
+18  sudo yum install setools-console
+19  seinfo
+20  sudo gedit /etc/selinux/config 
+21  sudo vim /etc/selinux/config
+22  seinfo -cfile -x
+23  seinfo -dir -x
+24  seinfo -blk_file
+25  seinfo -cblk_file -x
+26  seinfo -cchr_file -x
+27  seinfo -cInk_file -x
+28  seinfo -cink_file -x
+29  seinfo -clnk_file -x
+30  seinfo -cfifo_file -x
+31  seinfo -csock_file -x
+32  seinfo -csock_file -cfilesystem -x
+33  seinfo -csock_file -x
+34  seinfo -cdir -x
+35  cat /etc/selinux/targeted/contexts/files/file_contexts.homedirs
+36  sudo semanage fcontext -l
+37  touch filese
+38  ll -Z filese
+39  sesearch -T -s httpd_t var_log_t
+40  sudo sesearch -T -s httpd_t var_log_t
+41  sudo sesearch -T -s httpd_t -t var_log_t
+42  sudo sesearch -T -s httpd_t -t tmp_t
+43  sesearch -A -s passwd_t -t passwd_exec_t
+44  sesearch -A -s user_t -t passwd_exec_t
+45  sesearch -A -s user_t -t passwd_t
+46  cp filese /proc/
+47  ll -
+48  ll -Z /proc/filesystems 
+49  ls -Z filese
+50  chcon -t samba_share_t filese
+51  ls -Z filese
+52  cp filese filese1
+53  ls -Z filese1
+54  /sbin/restorecon -v filese
+55  su
+56  history > history.txt
+1  history
+2  touch /etc/file1
+3  ls -Z /etc/file1
+4  /usr/sbin/semanage fcontext -a -t samba_share_t /etc/file1
+5  ls -Z /etc/file1
+6  cat /etc/selinux/targeted/contexts/files/file_contexts.local | grep /etc/file1
+7  /sbin/restorecon -v /etc/file1
+8  rm -i /etc/file1
+9  /usr/sbin/semanage fcontext -d /etc/file1
+10  restorecon 
+11  ll /etc/
+12  ls -Z /etc/passwd
+13  ls -Z /etc/virc
+14  /usr/sbin/semanage boolean -l
+15  ftp_home_dir
+16  getsebool -a
+17  getsebool allow_console_login
+18  ausearch -m avc -ts recent
+19  seinfo | grep -E '(dontaudit|allow)'
+20  sudo yum install policycoreutil-gui
+21  system-config-selinux 
+22  history >> history.txt 
